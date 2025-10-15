@@ -1,0 +1,250 @@
+---
+---
+
+// 1. Impor semua gaya asli dari tema Minima sebagai dasar
+@import "minima";
+
+/* --- 2. Kustomisasi Skema Warna (Dark Mode Skin) --- */
+// Variabel ini akan kita gunakan untuk men-tweak warna dasar Minima
+$brand-color: #42a5f5;       // Biru muda sebagai warna utama
+$background-color: #121212;  // Latar belakang gelap
+$surface-color: #1e1e1e;    // Warna permukaan untuk elemen seperti kartu
+$text-color: #e0e0e0;        // Warna teks terang
+$secondary-text-color: #a0a0a0; // Warna teks sekunder
+$border-color: #2c2c2c;      // Warna border
+
+// Terapkan skema warna gelap ke elemen dasar
+body {
+  background-color: $background-color;
+  color: $text-color;
+}
+
+.site-header {
+  border-top: 5px solid $brand-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.site-title, .site-title:visited {
+  color: $text-color !important;
+}
+
+.site-nav .page-link {
+  color: $text-color;
+}
+
+.site-footer {
+  border-top: 1px solid $border-color;
+}
+
+// Atur warna link global dan hilangkan garis bawah saat hover
+a {
+  color: $brand-color;
+  &:hover {
+    text-decoration: none; // Menghilangkan underline secara global saat hover
+  }
+}
+
+
+/* --- 3. Gaya Komponen Papan Misi (Mission Board) --- */
+// Gaya ini sepenuhnya baru dan tidak menimpa komponen Minima
+
+.mission-board h1 {
+  text-align: center;
+  margin-bottom: 0.5em;
+  font-size: 2em;
+}
+
+.mission-board p {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 2em;
+}
+
+.card-container {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.mission-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.mission-card {
+  background: $surface-color;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mission-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba($brand-color, 0.2);
+  border-color: rgba($brand-color, 0.5);
+}
+
+.card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid $border-color;
+}
+
+.card-content {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-header, .card-title, .card-tags-wrapper, .card-contact, .card-excerpt {
+  color: $text-color;
+}
+
+.card-title {
+  font-size: 1.25em;
+  margin: 0 0 0.75em 0;
+}
+
+.card-tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 0.75rem;
+}
+
+.card-tag {
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.card-excerpt {
+  color: $secondary-text-color;
+  margin-top: auto;
+}
+
+/* Warna Tag */
+.tag-idea { background-color: #3498db; }
+.tag-recruit { background-color: #2ecc71; }
+.tag-in-progress, .tag-in-progres { background-color: #f39c12; }
+.tag-done { background-color: #9b59b6; }
+.tag-competition { background-color: #e74c3c; }
+
+
+/* --- 4. Penyesuaian Tata Letak (Responsive) --- */
+
+@media (min-width: 600px) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Perbaikan Dark Mode --- */
+
+/* 1. Menghilangkan latar putih di tombol menu navigasi */
+.site-nav {
+  background: none;
+  border: #2c2c2c;
+}
+
+/* 2. Mengubah gaya untuk tag <code> (kode inline) */
+code {
+  background-color: #2a2a2a; /* Warna latar gelap */
+  color: #e0e0e0;             /* Warna teks terang */
+  border: 1px solid #444;    /* Border abu-abu gelap */
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+}
+
+/* unvisited link - Warna biru standar yang jelas */
+a:link {
+  color: #2a7ae2;
+}
+
+/* visited link - Warna ungu yang menunjukkan link sudah pernah dikunjungi */
+a:visited {
+  color: #551a8b;
+}
+
+/* mouse over link - Warna biru yang sedikit lebih gelap untuk interaksi */
+a:hover {
+  color: #1756a9;
+}
+
+/* selected link - Warna merah terang untuk menandakan link sedang aktif diklik */
+a:active {
+  color: #e60000;
+}
+
+.post-content a, 
+.post-content p,
+.post-content li {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* --- Tombol Ajakan Aksi (Call-to-Action) Discord --- */
+
+.discord-cta-container {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  padding-top: 30px;
+}
+
+.discord-button {
+  display: inline-flex; /* Menggunakan flexbox untuk alignment */
+  align-items: center;  /* Menengahkan ikon dan teks secara vertikal */
+  gap: 10px;            /* Memberi jarak antara ikon dan teks */
+  background-color: #5865F2;
+  color: #ffffff !important;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.discord-button:hover {
+  background-color: #4752C4;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.discord-icon {
+  display: flex; /* Memastikan SVG berada di dalam container flex */
+  align-items: center;
+}
+
+/* --- Breadcrumbs Navigation --- */
+.breadcrumbs {
+  margin-bottom: 20px;
+  font-size: 0.9em;
+  color: #828282;
+}
+
+.breadcrumbs a {
+  color: #2a7ae2;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
