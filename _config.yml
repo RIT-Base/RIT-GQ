@@ -20,9 +20,7 @@
 
 title: RIT Guild Quest (Beta)
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+description: Inilah Papan Misi RIT (Guild Quest)! Sebuah papan misi digital untuk komunitas Republic of Information Technology (RIT) sebagai wadah Tempat bagi para pegiat IT untuk mencari proyek menarik, berbagi ide, mencari rekan tim, berkolaborasi bersama, dan mewujudkan proyek teknologi.
 baseurl: "/RIT-GQ" # the subpath of your site, e.g. /blog
 url: "https://RIT-Base.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  RIT-Base
