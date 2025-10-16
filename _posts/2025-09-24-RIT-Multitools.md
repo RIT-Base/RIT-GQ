@@ -6,7 +6,7 @@ excerpt: "Website berisi variasi tools utilitas. Kind of 'all-in-one' tool for e
 tags: [Idea, In Progress]
 discord_link: "https://discord.com/channels/1282118759623954515/1420393393401368639"
 # Ini opsional, hanya diisi jika ada gambar
-image: "https://raw.githubusercontent.com/RIT-Base/RIT-MULT/main/architecture.png" 
+image: assets\images\init (1).webp
 ---
 
 ### Deskripsi Singkat:

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/202061261?s=400&u=80f9d7669e799d3be3a78575889b4ef55a7ce77b&v=4" type="image/png"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>RIT-BOT | RIT Guild Quest (Beta)</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="RIT-BOT" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Inilah Papan Misi RIT (Guild Quest)! Sebuah papan misi digital untuk komunitas Republic of Information Technology (RIT) sebagai wadah Tempat bagi para pegiat IT untuk mencari proyek menarik, berbagi ide, mencari rekan tim, berkolaborasi bersama, dan mewujudkan proyek teknologi." />
+<meta property="og:description" content="Inilah Papan Misi RIT (Guild Quest)! Sebuah papan misi digital untuk komunitas Republic of Information Technology (RIT) sebagai wadah Tempat bagi para pegiat IT untuk mencari proyek menarik, berbagi ide, mencari rekan tim, berkolaborasi bersama, dan mewujudkan proyek teknologi." />
+<link rel="canonical" href="http://localhost:4000/RIT-GQ/assets/RIT-BOT.html" />
+<meta property="og:url" content="http://localhost:4000/RIT-GQ/assets/RIT-BOT.html" />
+<meta property="og:site_name" content="RIT Guild Quest (Beta)" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="RIT-BOT" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Inilah Papan Misi RIT (Guild Quest)! Sebuah papan misi digital untuk komunitas Republic of Information Technology (RIT) sebagai wadah Tempat bagi para pegiat IT untuk mencari proyek menarik, berbagi ide, mencari rekan tim, berkolaborasi bersama, dan mewujudkan proyek teknologi.","headline":"RIT-BOT","url":"http://localhost:4000/RIT-GQ/assets/RIT-BOT.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/RIT-GQ/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/RIT-GQ/feed.xml" title="RIT Guild Quest (Beta)" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/RIT-GQ/"><b>RIT Guild Quest (Beta)</b></a>
+  </div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">RIT-BOT</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="rit-bot">RIT-BOT</h1>
+
+<h1 id="discord-to-static-site-content-flow-rest--gateway-architecture">Discord-to-Static-Site Content Flow: REST + Gateway Architecture</h1>
+
+<p>This outline details the architecture for pulling content from a Discord channel, processing it, and exposing it to a static website using a Node.js intermediary with <code class="language-plaintext highlighter-rouge">discord.js</code>.</p>
+
+<h2 id="i-architecture-overview">I. Architecture Overview</h2>
+
+<p>The system relies on a middle layer (the Node.js server) because static sites cannot maintain a persistent WebSocket connection to the Discord Gateway or handle Discord API authentication directly.</p>
+
+<ol>
+  <li><strong>Discord:</strong> Source of real-time content.</li>
+  <li><strong>Node.js Server/Bot (<code class="language-plaintext highlighter-rouge">discord.js</code>):</strong> The heart of the system. It authenticates, fetches history (REST), listens for new messages (Gateway), processes/parses content, and stores it in a cache/database.</li>
+  <li><strong>Data Store (Cache/DB):</strong> A reliable place (like Firestore or a generated JSON file) where the static site can fetch the processed, final content.</li>
+  <li><strong>Static Site (Frontend):</strong> Fetches content from the Data Store/API endpoint and renders it.</li>
+</ol>
+
+<h2 id="ii-component-1-the-nodejs-server--discord-bot-discordjs">II. Component 1: The Node.js Server &amp; Discord Bot (<code class="language-plaintext highlighter-rouge">discord.js</code>)</h2>
+
+<p>This server handles all interaction with Discord and content processing.</p>
+
+<h3 id="1-setup-and-authentication-rest">1. Setup and Authentication (REST)</h3>
+
+<ul>
+  <li><strong>Libraries:</strong> <code class="language-plaintext highlighter-rouge">discord.js</code>, <code class="language-plaintext highlighter-rouge">dotenv</code>, an HTTP framework (e.g., Express).</li>
+  <li><strong>Client Initialization:</strong> Initialize the <code class="language-plaintext highlighter-rouge">discord.js</code> client with necessary partials and Intents (e.g., <code class="language-plaintext highlighter-rouge">GatewayIntentBits.GuildMessages</code>, <code class="language-plaintext highlighter-rouge">GatewayIntentBits.MessageContent</code>).</li>
+  <li><strong>Initial Data Fetch (REST):</strong>
+    <ul>
+      <li>On startup, use <code class="language-plaintext highlighter-rouge">client.channels.fetch('CHANNEL_ID')</code> to get the channel object.</li>
+      <li>Use <code class="language-plaintext highlighter-rouge">channel.messages.fetch({ limit: N })</code> to retrieve a bulk history of messages via the <strong>REST API</strong>. This is crucial for bootstrapping the content list.</li>
+      <li><em>Self-Correction/Filtering:</em> Implement initial filtering (e.g., only messages with a specific prefix, only messages from a specific bot/user).</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="2-the-custom-parser--processor">2. The Custom Parser &amp; Processor</h3>
+
+<ul>
+  <li><strong>Input:</strong> The raw <code class="language-plaintext highlighter-rouge">Message</code> object content.</li>
+  <li><strong>Core Logic:</strong>
+    <ul>
+      <li><strong>Filtering:</strong> Check if the message meets criteria (e.g., in a specific thread, contains a specific tag).</li>
+      <li><strong>Parsing (Markdown/Custom Format):</strong> If the message content is raw markdown, run it through a markdown library (like <code class="language-plaintext highlighter-rouge">marked</code> or an internal function) to convert it to sanitized HTML. If it uses a custom format (e.g., <code class="language-plaintext highlighter-rouge">[TITLE] | Content | [TAGS]</code>), extract the structured data.</li>
+      <li><strong>Normalization:</strong> Convert the processed data into a consistent JSON structure (e.g., <code class="language-plaintext highlighter-rouge">{ id: '...', title: '...', contentHtml: '...', date: '...' }</code>).</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="3-real-time-updates-gateway">3. Real-Time Updates (Gateway)</h3>
+
+<ul>
+  <li><strong>Listener:</strong> Use the <code class="language-plaintext highlighter-rouge">client.on('messageCreate', ...)</code> event listener. This utilizes the <strong>Gateway (WebSockets)</strong> for low-latency updates.</li>
+  <li><strong>Logic on Create/Update/Delete:</strong>
+    <ul>
+      <li>When a new message is created (<code class="language-plaintext highlighter-rouge">messageCreate</code>): Run it through the Custom Parser and save the resulting JSON object to the Data Store (see Section III).</li>
+      <li>When a message is updated (<code class="language-plaintext highlighter-rouge">messageUpdate</code>): Re-run the parser and update the existing entry in the Data Store.</li>
+      <li>When a message is deleted (<code class="language-plaintext highlighter-rouge">messageDelete</code>): Remove the corresponding entry from the Data Store.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="iii-component-2-the-data-store--cache-firestore-recommendation">III. Component 2: The Data Store / Cache (Firestore Recommendation)</h2>
+
+<p>Since the static site cannot directly listen to the Discord Gateway, the Node.js server must write the final content to an accessible store.</p>
+
+<ul>
+  <li><strong>Recommendation: Firestore</strong>
+    <ul>
+      <li><strong>Path Structure (Public Data):</strong> <code class="language-plaintext highlighter-rouge">/artifacts/{appId}/public/data/discord_content</code> (collection).</li>
+      <li><strong>Documents:</strong> Each document represents one processed message.
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">documentId</code>: The Discord message ID.</li>
+          <li><code class="language-plaintext highlighter-rouge">data</code>: The JSON object generated by the Custom Parser.</li>
+        </ul>
+      </li>
+      <li><strong>Benefit:</strong> The static site can use the Firebase SDK to query the data instantly, benefiting from real-time updates whenever the Node server pushes a change.</li>
+    </ul>
+  </li>
+  <li><strong>Alternative: Static JSON Generation</strong>
+    <ul>
+      <li>If using a traditional static host (like Netlify/GitHub Pages): The Node.js server could write the full list of content to a local file (<code class="language-plaintext highlighter-rouge">content.json</code>) and upload this file to the static site’s asset folder whenever a change is detected.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="iv-component-3-the-static-site-frontend">IV. Component 3: The Static Site (Frontend)</h2>
+
+<p>The website is decoupled and only concerns itself with fetching and displaying the finalized content.</p>
+
+<h3 id="1-data-fetching">1. Data Fetching</h3>
+
+<ul>
+  <li><strong>If using Firestore:</strong> Use the Firebase JS SDK’s <code class="language-plaintext highlighter-rouge">onSnapshot</code> on the <code class="language-plaintext highlighter-rouge">/discord_content</code> collection to get a real-time list of all content items.</li>
+  <li><strong>If using JSON File:</strong> Use a standard JavaScript <code class="language-plaintext highlighter-rouge">fetch()</code> request to retrieve the <code class="language-plaintext highlighter-rouge">content.json</code> file on page load.</li>
+</ul>
+
+<h3 id="2-content-display-and-rendering">2. Content Display and Rendering</h3>
+
+<ul>
+  <li><strong>Filtering/Sorting (Client-Side):</strong> The frontend can implement additional filtering (e.g., by date, tag, or keyword) and sorting using client-side JavaScript.</li>
+  <li><strong>Rendering:</strong> Iterate over the content list and inject the pre-processed HTML (<code class="language-plaintext highlighter-rouge">contentHtml</code>) into the DOM.</li>
+  <li><strong>Aesthetics:</strong> Use Tailwind CSS or similar utility-first frameworks to make the displayed content clean, readable, and responsive.</li>
+</ul>
+
+<p>This structure ensures that the computationally heavy and sensitive (API key-dependent) parts remain on your secure Node.js server, while the fast, simple, and scalable content is served to the static site.</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/RIT-GQ/"></data>
+
+  <div class="wrapper">
+    <div style="text-align: center; color: #dedede; font-size: 0.9em;">
+      <p style="margin-bottom: 5px;">
+        <strong>Republic of Information Technology (RIT)</strong>
+      </p>
+      <p style="margin-top: 5px;">
+        Papan Misi untuk menemukan proyek dan berkolaborasi. Dikelola oleh komunitas RIT.
+      </p>
+       <p style="font-size: 0.9em; margin-top: 10px;">
+        &copy; 2025
+      </p>
+    </div>
+  </div>
+
+</footer></body>
+
+</html>

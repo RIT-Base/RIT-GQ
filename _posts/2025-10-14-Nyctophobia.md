@@ -6,7 +6,7 @@ excerpt: "Game horor atmospheric 3D dengan tema takut akan kegelapan"
 tags: [Idea]
 discord_link: "https://discord.com/channels/1282118759623954515/1427447080598896792"
 # Ini opsional, hanya diisi jika ada gambar
-image: "https://cdn.discordapp.com/attachments/1427447080598896792/1427447080892371104/lonely-man-walking-dark-alley-260nw-1884395935.jpg?ex=68f036b0&is=68eee530&hm=faf3f422dc52424b70c3dcd6400da93b647087cd3e95d90560ddd725849cb7fb" 
+image: assets\images\init (6).webp 
 ---
 
 ### Deskripsi Singkat:

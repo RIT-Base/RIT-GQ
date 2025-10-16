@@ -6,7 +6,7 @@ excerpt: "Projek ini bertujuan untuk membuat basecamp di roblox untuk kebutuhan 
 tags: [In Progress, Recruit] 
 discord_link: https://discord.com/channels/1282118759623954515/1421811780119953498
 # Ini opsional, hanya diisi jika ada gambar
-image: "https://media.discordapp.net/attachments/1421811780119953498/1421811780434399372/ritbase-layout.jpg?ex=68f025a8&is=68eed428&hm=50b6137e210866ccd4e63b4e8230858f64b193ea44ce1568db9c550114b0ec9e&=&format=webp&width=618&height=482" 
+image: assets\images\init (4).webp
 ---
 
 ### Deskripsi Singkat:
