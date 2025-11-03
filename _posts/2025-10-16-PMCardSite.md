@@ -4,7 +4,7 @@ title: Private Message Card Site
 narahubung: "@asymmetry1"
 excerpt: Website login page sederhana, fetch/baca pesan private yang udah di-set untuk beberapa akun. 
 tags: [Idea, Recruit] 
-discord_link:
+discord_link: "https://discord.com/channels/1282118759623954515/1428418655225516133"
 # Ini opsional, hanya diisi jika ada gambar
 image: https://images.unsplash.com/photo-1621006487841-0682f3469a83?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=20&w=800
 ---
